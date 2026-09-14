@@ -5,6 +5,9 @@ library(purrr)
 library(ggimage)
 library(showtext)
 library(gganimate)
+library(magick)
+library(rsvg)
+library(httr)
 
 font_add(family = "FranklinGothic", regular = "framd.ttf")
 font_add(family = "ComicSans", regular = "comic.ttf")
@@ -192,10 +195,14 @@ d <- list(w1_roster) %>%
 
 d_col <- d %>% summarise(all_score = sum(totalScore,na.rm = T)) %>% inner_join(.,logo)
 
+d_col <- d_col %>% mutate(logo_path = paste0("team_logos/",abbrev,".png"))
+
+
+
 all_week_scores_bar_chart <- ggplot(d_col,aes(x=reorder(abbrev,all_score),y =all_score))+
   geom_col(fill = "darkgreen")+
   coord_flip()+
-  geom_image(aes(image = logo),
+  geom_image(aes(image = logo_path),
              size = 0.09,position = position_stack(vjust = 1))+
   labs(title = "Total Points Scored",y="Points")+
   theme(axis.text.y = element_blank(), axis.ticks.y = element_blank(),axis.title.y = element_blank(),
