@@ -332,7 +332,7 @@ standings_table <- league_standings(seasonId = 2026) %>%
     locations = cells_column_labels(columns = c(playoffSeed, record))
   )
 
-gtsave(standings_table,"w7.png")
+gtsave(standings_table,"w1.png")
 
 standings_table %>%  gtsave("StandingsRankings.png",expand=10)
 
