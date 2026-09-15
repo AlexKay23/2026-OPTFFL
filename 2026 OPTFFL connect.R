@@ -366,7 +366,7 @@ ggplot(d_col,aes(x = reorder(abbrev,+all_score),y= all_score))+
   )+
   coord_polar()+
   geom_image(aes(image = logo),
-             size = 0.08,position = position_stack(vjust = 1.26))
+             size = 0.06,position = position_stack(vjust = 1.26))
 #####
 # szn_stat_2024 <- nflreadr::load_player_stats(seasons = most_recent_season(),stat_type = "offense")
 # rushing <- nflreadr::load_nextgen_stats(seasons = most_recent_season(),stat_type = "rushing")

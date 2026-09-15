@@ -217,7 +217,7 @@ weekly_scores <- qzn_data %>%
     abbrev == "LLL" ~ "Oreo",
     abbrev == "NNT" ~ "Pringle",
     abbrev == "GPG" ~ "Oreo",
-    abbrev == "EET" ~ "Oreo"
+    abbrev == "PAPC" ~ "Oreo"
     
     
   ))
@@ -238,7 +238,7 @@ OPTFFL_team_colors <- c("KAY" = "#909090",
                         "NGT" = "#c27514",
                         "OPE" = "#cc5d3f",
                         "CNP" = "#129b51",
-                        "EET" = "#bfe3ce",
+                        "PAPC" = "#bfe3ce",
                         "JOSh" = "#2d2e2c",
                         "TCC" = "orange",
                         "LLL" = "#0077B5",
