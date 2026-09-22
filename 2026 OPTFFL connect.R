@@ -22,7 +22,7 @@ showtext_auto()
 # install.packages("remotes")
 # remotes::install_github("k5cents/fflr")
 
-scoring_week <- 1
+scoring_week <- 2
 
 library(fflr)
 library(nflverse)
@@ -153,21 +153,21 @@ w1_roster <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 1) %>% map(.,as
 w2_roster <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 2) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
   filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>%
   select(2,4,17)
-w3_roster <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 3) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
-   filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>% 
-   select(2,4,17)
- w4_roster <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 4) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
-   filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>% 
-   select(2,4,17)
- w5_roster <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 5) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
-   filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>% 
-   select(2,4,17)
-w6_roster <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 6) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
-  filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>%
-  select(2,4,17)
-w7_roster <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 7) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
-  filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>%
-  select(2,4,17)
+# w3_roster <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 3) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
+#    filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>% 
+#    select(2,4,17)
+#  w4_roster <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 4) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
+#    filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>% 
+#    select(2,4,17)
+#  w5_roster <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 5) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
+#    filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>% 
+#    select(2,4,17)
+# w6_roster <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 6) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
+#   filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>%
+#   select(2,4,17)
+# w7_roster <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 7) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
+#   filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>%
+#   select(2,4,17)
 # w8_roster <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 8) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
 #   filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>% 
 #   select(2,4,17)
@@ -190,7 +190,7 @@ w7_roster <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 7) %>% map(.,as
 #   filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>% 
 #   select(2,4,17)
 
-d <- list(w1_roster) %>% 
+d <- list(w1_roster,w2_roster) %>% 
   reduce(full_join) %>% distinct() %>% inner_join(.,logo)
 
 d_col <- d %>% summarise(all_score = sum(totalScore,na.rm = T)) %>% inner_join(.,logo)
@@ -298,6 +298,7 @@ ggplot(d,aes(x=abbrev,y=totalScore))+geom_boxplot(aes(size = totalScore))
 #   arrange(desc(diff)) %>% view()
 
 # Ranking Table
+Sys.setenv(CHROMOTE_CHROME = "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe")
 
 standings_table <- league_standings(seasonId = 2026) %>% 
   inner_join(.,logo) %>%
@@ -332,7 +333,7 @@ standings_table <- league_standings(seasonId = 2026) %>%
     locations = cells_column_labels(columns = c(playoffSeed, record))
   )
 
-gtsave(standings_table,"w1.png")
+gtsave(standings_table,"w2.png")
 
 standings_table %>%  gtsave("StandingsRankings.png",expand=10)
 
