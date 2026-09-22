@@ -23,7 +23,7 @@ fflr::ffl_id(leagueId = 710908445)
 
 # Load Data ####
 
-scoring_week <- 1
+scoring_week <- 2
 
 logo <- league_teams(seasonId = 2026) %>% 
   select(2:4)
@@ -48,14 +48,14 @@ w1_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 1) %>% map
   filter(lineupSlot != "BE")
 w2_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 2) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
   filter(lineupSlot != "BE") 
- w3_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 3) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
-   filter(lineupSlot != "BE")
-w4_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 4) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
-   filter(lineupSlot != "BE")
-w5_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 5) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
-  filter(lineupSlot != "BE")
-w6_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 6) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
-  filter(lineupSlot != "BE")
+#  w3_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 3) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
+#    filter(lineupSlot != "BE")
+# w4_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 4) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
+#    filter(lineupSlot != "BE")
+# w5_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 5) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
+#   filter(lineupSlot != "BE")
+# w6_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 6) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
+#   filter(lineupSlot != "BE")
 # w7_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 7) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
 #   filter(lineupSlot != "BE")
 # w8_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 8) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
@@ -76,9 +76,7 @@ w6_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 6) %>% map
 ## Weekly Scores Join
 
 qzn_data <- list(w1_roster_Qszn,
-     w2_roster_Qszn,
-     w3_roster_Qszn,
-     w4_roster_Qszn) %>% 
+     w2_roster_Qszn) %>% 
   reduce(full_join) %>% distinct() %>% inner_join(.,logo)
 
 
