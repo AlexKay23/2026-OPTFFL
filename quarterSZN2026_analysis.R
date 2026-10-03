@@ -23,7 +23,7 @@ fflr::ffl_id(leagueId = 710908445)
 
 # Load Data ####
 
-scoring_week <- 2
+scoring_week <- 4
 
 logo <- league_teams(seasonId = 2026) %>% 
   select(2:4)
@@ -48,10 +48,10 @@ w1_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 1) %>% map
   filter(lineupSlot != "BE")
 w2_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 2) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
   filter(lineupSlot != "BE") 
-#  w3_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 3) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
-#    filter(lineupSlot != "BE")
-# w4_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 4) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
-#    filter(lineupSlot != "BE")
+ w3_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 3) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
+   filter(lineupSlot != "BE")
+w4_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 4) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
+   filter(lineupSlot != "BE")
 # w5_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 5) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
 #   filter(lineupSlot != "BE")
 # w6_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 6) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
@@ -76,7 +76,9 @@ w2_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 2) %>% map
 ## Weekly Scores Join
 
 qzn_data <- list(w1_roster_Qszn,
-     w2_roster_Qszn) %>% 
+     w2_roster_Qszn,
+     w3_roster_Qszn,
+     w4_roster_Qszn) %>% 
   reduce(full_join) %>% distinct() %>% inner_join(.,logo)
 
 
@@ -309,7 +311,56 @@ ggplot(standings_data,
 
 
 
+### Projected vs Actual
+
+projected_vs_actuals <- qzn_data %>% 
+  filter(lineupSlot != "IR") %>%  # remove IR spot from lineup
+  group_by(scoringPeriodId,teamId) %>%  #group by week and team
+  mutate(sum_projected = sum(projectedScore)) %>%  # calculates the teams projected score for the week
+  mutate(sum_actual = sum(actualScore)) %>%   # calculates the teams actual points for the week
+  select(scoringPeriodId,teamId,abbrev,logo,sum_projected,sum_actual) %>% 
+  distinct() %>% #removes duplicate rows
+  ungroup() %>% # ungroup to start fresh
+  mutate(pct_projected_pts = sum_actual/sum_projected) %>% 
+  mutate(projectVsActual = sum_actual - sum_projected) %>% 
+  mutate(leauge_projVsActual = mean(projectVsActual,na.rm=TRUE)) %>% 
+  mutate(sd = sd(projectVsActual,na.rm = TRUE)) %>% 
+  mutate(lower_limit = leauge_projVsActual - (2 * sd),
+         upper_limit = leauge_projVsActual + (2* sd)) %>% 
+  mutate(result_check = case_when(projectVsActual < lower_limit ~ "Bust",
+                                  projectVsActual > upper_limit ~ "Boom",
+                                  TRUE ~ "In range")) %>%  #interesting note, as of 10/2, CWs W1 -40 not a bust!!!
+  group_by(teamId) %>% #group by team to calculate mean projected difference below
+  mutate(team_avg_outcome_diff = mean(projectVsActual,na.rm=TRUE)) %>% 
+  mutate(team_avg_pct_pts = mean(pct_projected_pts, na.rm=TRUE)) %>% 
+  mutate(team_avg_projected_pts = mean(sum_projected, na.rm=TRUE)) %>% 
+  ungroup()
+  
+
+leauge_projVsActual_line_Value <- projected_vs_actuals %>% pull(leauge_projVsActual) %>% mean(na.rm = TRUE)
 
 
+ggplot(projected_vs_actuals %>% select(abbrev,team_avg_outcome_diff,team_avg_projected_pts) %>% distinct() %>% mutate(logo_path = paste0("team_logos/",abbrev,".png")), 
+       aes(x=reorder(abbrev, -team_avg_projected_pts),y=team_avg_outcome_diff,fill = abbrev))+
+  geom_col()+
+  scale_fill_manual(values = OPTFFL_team_colors)+
+  geom_image(aes(image = logo_path),
+             size = 0.09,position = position_stack(vjust = 1))+
+  geom_hline(yintercept = leauge_projVsActual_line_Value,linewidth = 1.5,colour = "blue",linetype = 2)+
+  geom_text(aes(x="YARN",y= leauge_projVsActual_line_Value -1.5 ,label = paste0("Leauge Average ",round(leauge_projVsActual_line_Value,2))),
+            family = "Trebuchet",fontface = "bold",size = 4.5,check_overlap = TRUE)+
+  xlab("Teams Ordered by Average Projected Points")+
+  ylab("Projected Points - Actual Points")+
+  theme(
+    panel.background = element_rect(fill = "#fafafa", color = NA),
+    plot.background = element_rect(fill = "#fafafa", color = NA),
+    text = element_text(family = "Trebuchet",face = "bold"),panel.grid.major.y = element_line(color = "#fafafa"),
+    panel.grid.minor.y = element_line(color = "#fafafa"),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    legend.position = "none",
+    axis.ticks.x = element_blank(),
+    axis.text.x = element_blank()
+  )
 
 
