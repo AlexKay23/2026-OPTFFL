@@ -247,7 +247,7 @@ OPTFFL_team_colors <- c("KAY" = "#909090",
                         "YARN" = "#ed2246"
 )
 
-ggplot(weekly_scores, aes(x = weeklyScore, y = abbrev, group = abbrev, fill = abbrev)) +
+weekly_ridge_score_plot <- ggplot(weekly_scores, aes(x = weeklyScore, y = abbrev, group = abbrev, fill = abbrev)) +
   geom_density_ridges() +
   facet_wrap(~division, scales = "free_y", nrow = 1) +
   scale_fill_manual(values = OPTFFL_team_colors)+
@@ -277,7 +277,7 @@ standings_data <- fflr::league_standings(seasonId = 2026) %>%
   mutate(record = paste(wins,losses, sep = "-"))
 
 
-ggplot(standings_data,
+pts_for_vs_against_plot <- ggplot(standings_data,
        aes(x=pointsFor,y=pointsAgainst))+
   geom_point()+
   geom_image(aes(image = logo),
@@ -293,10 +293,10 @@ ggplot(standings_data,
   geom_hline(yintercept = mean(standings_data$pointsAgainst),color="darkgreen",linewidth=1.5,alpha=0.4)+
   # annotate("text",y = mean(standings_data$pointsAgainst)+5,x=425,label="avg pts against")+
   # annotate("text",x=mean(standings_data$pointsFor)-5,y=265,label="avg pts For",angle=90)+
-  annotate("text",x= 280,y=220,label = "Weak Performances",size=5,fontface="bold")+
-  annotate("text",x= 350, y=270, label = "Easy Schedule",size=5,fontface="bold")+
-  annotate("text",x= 350, y= 370, label= "Battle Tested",size=5,fontface="bold")+
-  annotate("text",x= 280,y=370,label="Tough Schedule",size=5,fontface="bold")+
+  annotate("text",x= 345,y=345,label = "Lucky or Bad?",size=5,fontface="bold")+
+  annotate("text",x= 475, y=350, label = "Easy Schedule",size=5,fontface="bold")+
+  annotate("text",x= 470, y= 470, label= "Battle Tested",size=5,fontface="bold")+
+  annotate("text",x= 345,y=470,label="Tough Schedule",size=5,fontface="bold")+
   theme_bw()+
   theme(text = element_text(family = "Trebuchet",face = "bold"),
         plot.title = element_text(hjust = 0.5,size = 24),
@@ -334,13 +334,15 @@ projected_vs_actuals <- qzn_data %>%
   mutate(team_avg_outcome_diff = mean(projectVsActual,na.rm=TRUE)) %>% 
   mutate(team_avg_pct_pts = mean(pct_projected_pts, na.rm=TRUE)) %>% 
   mutate(team_avg_projected_pts = mean(sum_projected, na.rm=TRUE)) %>% 
-  ungroup()
+  ungroup() %>% 
+  left_join(., select(standings_data,teamId,playoffSeed))
   
 
 leauge_projVsActual_line_Value <- projected_vs_actuals %>% pull(leauge_projVsActual) %>% mean(na.rm = TRUE)
 
 
-ggplot(projected_vs_actuals %>% select(abbrev,team_avg_outcome_diff,team_avg_projected_pts) %>% distinct() %>% mutate(logo_path = paste0("team_logos/",abbrev,".png")), 
+
+avg_proj_points_diff_plot<-ggplot(projected_vs_actuals %>% select(abbrev,team_avg_outcome_diff,team_avg_projected_pts) %>% distinct() %>% mutate(logo_path = paste0("team_logos/",abbrev,".png")), 
        aes(x=reorder(abbrev, -team_avg_projected_pts),y=team_avg_outcome_diff,fill = abbrev))+
   geom_col()+
   scale_fill_manual(values = OPTFFL_team_colors)+
@@ -350,7 +352,7 @@ ggplot(projected_vs_actuals %>% select(abbrev,team_avg_outcome_diff,team_avg_pro
   geom_text(aes(x="YARN",y= leauge_projVsActual_line_Value -1.5 ,label = paste0("Leauge Average ",round(leauge_projVsActual_line_Value,2))),
             family = "Trebuchet",fontface = "bold",size = 4.5,check_overlap = TRUE)+
   xlab("Teams Ordered by Average Projected Points")+
-  ylab("Projected Points - Actual Points")+
+  ylab("Average Projected - Actual Point Differental")+
   theme(
     panel.background = element_rect(fill = "#fafafa", color = NA),
     plot.background = element_rect(fill = "#fafafa", color = NA),
@@ -362,5 +364,48 @@ ggplot(projected_vs_actuals %>% select(abbrev,team_avg_outcome_diff,team_avg_pro
     axis.ticks.x = element_blank(),
     axis.text.x = element_blank()
   )
+
+
+standings_proj_points_diff_plot<-ggplot(projected_vs_actuals %>% select(abbrev,team_avg_outcome_diff,playoffSeed) %>% distinct() %>% mutate(logo_path = paste0("team_logos/",abbrev,".png")), 
+                                  aes(x=reorder(abbrev, playoffSeed),y=team_avg_outcome_diff,fill = abbrev))+
+  geom_col()+
+  scale_fill_manual(values = OPTFFL_team_colors)+
+  geom_image(aes(image = logo_path),
+             size = 0.09,position = position_stack(vjust = 1))+
+  geom_hline(yintercept = leauge_projVsActual_line_Value,linewidth = 1.5,colour = "blue",linetype = 2)+
+  geom_text(aes(x="NNT",y= leauge_projVsActual_line_Value +1.5 ,label = paste0("Leauge Average ",round(leauge_projVsActual_line_Value,2))),
+            family = "Trebuchet",fontface = "bold",size = 4.5,check_overlap = TRUE)+
+  xlab("Teams Ordered by Playoff seed")+
+  ylab("Average Projected - Actual Point Differental")+
+  theme(
+    panel.background = element_rect(fill = "#fafafa", color = NA),
+    plot.background = element_rect(fill = "#fafafa", color = NA),
+    text = element_text(family = "Trebuchet",face = "bold"),panel.grid.major.y = element_line(color = "#fafafa"),
+    panel.grid.minor.y = element_line(color = "#fafafa"),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    legend.position = "none",
+    axis.ticks.x = element_blank(),
+    axis.text.x = element_blank()
+  )
+
+today <- lubridate::today()
+ggsave(
+  filename = paste0("Weekly Ridge Plot ", today, ".png"),
+  plot = weekly_ridge_score_plot,
+  path = "Recaps/QZN Plots")
+ggsave(
+  filename = paste0("Points for vs against Plot ", today, ".png"),
+  plot = pts_for_vs_against_plot,
+  path = "Recaps/QZN Plots")
+ggsave(
+  filename = paste0("Average Points Diff Plot Projections ", today, ".png"),
+  plot = avg_proj_points_diff_plot,
+  path = "Recaps/QZN Plots")
+ggsave(
+  filename = paste0("Average Points Diff Plot Standings ", today, ".png"),
+  plot = standings_proj_points_diff_plot,
+  path = "Recaps/QZN Plots")
+
 
 
