@@ -23,7 +23,7 @@ fflr::ffl_id(leagueId = 710908445)
 
 # Load Data ####
 
-scoring_week <- 4
+scoring_week <- 5
 
 logo <- league_teams(seasonId = 2026) %>% 
   select(2:4)
@@ -52,8 +52,8 @@ w2_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 2) %>% map
    filter(lineupSlot != "BE")
 w4_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 4) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
    filter(lineupSlot != "BE")
-# w5_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 5) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
-#   filter(lineupSlot != "BE")
+w5_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 5) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
+  filter(lineupSlot != "BE")
 # w6_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 6) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
 #   filter(lineupSlot != "BE")
 # w7_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 7) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
@@ -78,7 +78,8 @@ w4_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 4) %>% map
 qzn_data <- list(w1_roster_Qszn,
      w2_roster_Qszn,
      w3_roster_Qszn,
-     w4_roster_Qszn) %>% 
+     w4_roster_Qszn,
+     w5_roster_Qszn) %>% 
   reduce(full_join) %>% distinct() %>% inner_join(.,logo)
 
 
