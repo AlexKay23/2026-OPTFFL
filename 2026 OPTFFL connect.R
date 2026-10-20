@@ -22,7 +22,7 @@ showtext_auto()
 # install.packages("remotes")
 # remotes::install_github("k5cents/fflr")
 
-scoring_week <- 5
+scoring_week <- 6
 
 library(fflr)
 library(nflverse)
@@ -162,9 +162,9 @@ w3_roster <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 3) %>% map(.,as
  w5_roster <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 5) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
    filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>%
    select(2,4,17)
-# w6_roster <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 6) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
-#   filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>%
-#   select(2,4,17)
+w6_roster <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 6) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
+  filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>%
+  select(2,4,17)
 # w7_roster <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 7) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
 #   filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>%
 #   select(2,4,17)
@@ -190,7 +190,7 @@ w3_roster <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 3) %>% map(.,as
 #   filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>% 
 #   select(2,4,17)
 
-d <- list(w1_roster,w2_roster,w3_roster,w4_roster,w5_roster) %>% 
+d <- list(w1_roster,w2_roster,w3_roster,w4_roster,w5_roster,w6_roster) %>% 
   reduce(full_join) %>% distinct() %>% inner_join(.,logo)
 
 d_col <- d %>% summarise(all_score = sum(totalScore,na.rm = T)) %>% inner_join(.,logo)
@@ -273,52 +273,52 @@ ggplotly(cumulaitve_plot_line)
 saveWidget(ggplotly(cumulaitve_plot_line),file = "cumulative_line_plot.html")
 
 
-
-ggplot(d,aes(x=abbrev,y=totalScore))+geom_boxplot(aes(size = totalScore))
-
-library(gganimate)
-static_cumulative_plot_animate <- ggplot(score_rank_by_week) +
-  geom_rect(
-    aes(
-      xmin = 0,
-      xmax = cumulative_score,
-      ymin = rank - 0.45,
-      ymax = rank + 0.45,
-      fill = abbrev
-    ),
-    alpha = 0.7
-  ) +
-  geom_image(aes(x=cumulative_score,y=rank,image = logo),size = 0.09)+
-  facet_wrap(~ scoringPeriodId, labeller = labeller(scoringPeriodId = function(x) paste0("Week ", x)))+
-  scale_fill_manual(values = OPTFFL_team_colors)+
-  scale_y_reverse()+
-  labs(y="")+
-  labs(x = "Total Points Scored")+
-  theme(panel.background = element_rect(fill = "#fafafa", color = NA),
-        plot.background = element_rect(fill = "#fafafa", color = NA),
-        panel.grid.major.y = element_line(color = "#fafafa"),
-        panel.grid.minor.y = element_line(color = "#fafafa"),
-        panel.grid.major.x = element_blank(),
-        panel.grid.minor.x = element_blank(),
-        text = element_text(family = "Trebuchet",face = "bold"),
-        plot.title = element_text(hjust = 0.5,size = 24),
-        axis.title.x = element_text(size = 20,family = "Trebuchet",face = "bold"),
-        axis.text.x = element_blank(),
-        axis.title.y = element_text(size = 20,family = "Trebuchet",face = "bold"),
-        axis.text.y = element_text(size = 15),
-        strip.background = element_rect(fill = "#fafafa", color = NA),
-        axis.text.y.left = element_blank(),
-        axis.ticks.y = element_blank(),
-        axis.line.y = element_blank(),
-        legend.position = "none")
-
-static_cumulative_plot_animate+
-  facet_null()+
-  geom_text(x=450,y=-15,
-            family = "Trebuchet",
-            aes(label = as.character(scoringPeriodId)),
-            size = 30)+
-  transition_time(scoringPeriodId)
+# 
+# ggplot(d,aes(x=abbrev,y=totalScore))+geom_boxplot(aes(size = totalScore))
+# 
+# library(gganimate)
+# static_cumulative_plot_animate <- ggplot(score_rank_by_week) +
+#   geom_rect(
+#     aes(
+#       xmin = 0,
+#       xmax = cumulative_score,
+#       ymin = rank - 0.45,
+#       ymax = rank + 0.45,
+#       fill = abbrev
+#     ),
+#     alpha = 0.7
+#   ) +
+#   geom_image(aes(x=cumulative_score,y=rank,image = logo),size = 0.09)+
+#   facet_wrap(~ scoringPeriodId, labeller = labeller(scoringPeriodId = function(x) paste0("Week ", x)))+
+#   scale_fill_manual(values = OPTFFL_team_colors)+
+#   scale_y_reverse()+
+#   labs(y="")+
+#   labs(x = "Total Points Scored")+
+#   theme(panel.background = element_rect(fill = "#fafafa", color = NA),
+#         plot.background = element_rect(fill = "#fafafa", color = NA),
+#         panel.grid.major.y = element_line(color = "#fafafa"),
+#         panel.grid.minor.y = element_line(color = "#fafafa"),
+#         panel.grid.major.x = element_blank(),
+#         panel.grid.minor.x = element_blank(),
+#         text = element_text(family = "Trebuchet",face = "bold"),
+#         plot.title = element_text(hjust = 0.5,size = 24),
+#         axis.title.x = element_text(size = 20,family = "Trebuchet",face = "bold"),
+#         axis.text.x = element_blank(),
+#         axis.title.y = element_text(size = 20,family = "Trebuchet",face = "bold"),
+#         axis.text.y = element_text(size = 15),
+#         strip.background = element_rect(fill = "#fafafa", color = NA),
+#         axis.text.y.left = element_blank(),
+#         axis.ticks.y = element_blank(),
+#         axis.line.y = element_blank(),
+#         legend.position = "none")
+# 
+# static_cumulative_plot_animate+
+#   facet_null()+
+#   geom_text(x=450,y=-15,
+#             family = "Trebuchet",
+#             aes(label = as.character(scoringPeriodId)),
+#             size = 30)+
+#   transition_time(scoringPeriodId)
 
 ### what if we did it by position and filled it by team?
 
@@ -374,7 +374,7 @@ standings_table <- league_standings(seasonId = 2026) %>%
     locations = cells_column_labels(columns = c(playoffSeed, record))
   )
 
-gtsave(standings_table,"w5.png")
+gtsave(standings_table,"w6.png")
 
 standings_table %>%  gtsave("StandingsRankings.png",expand=10)
 
