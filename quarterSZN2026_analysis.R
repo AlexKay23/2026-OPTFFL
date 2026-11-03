@@ -23,7 +23,7 @@ fflr::ffl_id(leagueId = 710908445)
 
 # Load Data ####
 
-scoring_week <- 6
+scoring_week <- 8
 
 logo <- league_teams(seasonId = 2026) %>% 
   select(2:4)
@@ -56,10 +56,10 @@ w5_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 5) %>% map
   filter(lineupSlot != "BE")
 w6_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 6) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
   filter(lineupSlot != "BE")
-# w7_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 7) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
-#   filter(lineupSlot != "BE")
-# w8_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 8) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
-#   filter(lineupSlot != "BE")
+w7_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 7) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
+  filter(lineupSlot != "BE")
+w8_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 8) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
+  filter(lineupSlot != "BE")
 # w9_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 9) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
 #   filter(lineupSlot != "BE")
 # w10_roster_Qszn <- fflr::team_roster(scoringPeriodId = 10) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
@@ -80,7 +80,9 @@ qzn_data <- list(w1_roster_Qszn,
      w3_roster_Qszn,
      w4_roster_Qszn,
      w5_roster_Qszn,
-     w6_roster_Qszn) %>% 
+     w6_roster_Qszn,
+     w7_roster_Qszn,
+     w8_roster_Qszn) %>% 
   reduce(full_join) %>% distinct() %>% inner_join(.,logo)
 
 
@@ -295,10 +297,10 @@ pts_for_vs_against_plot <- ggplot(standings_data,
   geom_hline(yintercept = mean(standings_data$pointsAgainst),color="darkgreen",linewidth=1.5,alpha=0.4)+
   # annotate("text",y = mean(standings_data$pointsAgainst)+5,x=425,label="avg pts against")+
   # annotate("text",x=mean(standings_data$pointsFor)-5,y=265,label="avg pts For",angle=90)+
-  annotate("text",x= 545,y=545,label = "Lucky or Bad?",size=5,fontface="bold")+
-  annotate("text",x= 775, y=550, label = "Easy Schedule",size=5,fontface="bold")+
-  annotate("text",x= 775, y= 700, label= "Battle Tested",size=5,fontface="bold")+
-  annotate("text",x= 545,y=700,label="Tough Schedule",size=5,fontface="bold")+
+  annotate("text",x= 700,y=650,label = "Lucky or Bad?",size=5,fontface="bold")+
+  annotate("text",x= 950, y=650, label = "Easy Schedule",size=5,fontface="bold")+
+  annotate("text",x= 950, y= 950, label= "Battle Tested",size=5,fontface="bold")+
+  annotate("text",x= 700,y=950,label="Tough Schedule",size=5,fontface="bold")+
   theme_bw()+
   theme(text = element_text(family = "Trebuchet",face = "bold"),
         plot.title = element_text(hjust = 0.5,size = 24),
