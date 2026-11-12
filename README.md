@@ -11,4 +11,5 @@
 
 | Total Points Animation | Current Standings |
 | :---: | :---: |
-| <img src="Recaps/Total Points Scored Animation.gif" alt="Total Points Scored Animation" width="547"> | <img src="Recaps/rankings.png" alt="Current Rankings" width="273"> |
+| <img src="Recaps/Total%20Points%20Scored%20Animation.gif" alt="Total Points Scored Animation" width="547"> | <img src="Recaps/rankings.png" alt="Current Rankings" width="273"> |
+
