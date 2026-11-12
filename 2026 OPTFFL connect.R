@@ -273,69 +273,84 @@ ggplotly(cumulaitve_plot_line)
 saveWidget(ggplotly(cumulaitve_plot_line),file = "cumulative_line_plot.html")
 
 
-# 
-# ggplot(d,aes(x=abbrev,y=totalScore))+geom_boxplot(aes(size = totalScore))
-# 
-# library(gganimate)
-# static_cumulative_plot_animate <- ggplot(score_rank_by_week) +
-#   geom_rect(
-#     aes(
-#       xmin = 0,
-#       xmax = cumulative_score,
-#       ymin = rank - 0.45,
-#       ymax = rank + 0.45,
-#       fill = abbrev
-#     ),
-#     alpha = 0.7
-#   ) +
-#   geom_image(aes(x=cumulative_score,y=rank,image = logo),size = 0.09)+
-#   facet_wrap(~ scoringPeriodId, labeller = labeller(scoringPeriodId = function(x) paste0("Week ", x)))+
-#   scale_fill_manual(values = OPTFFL_team_colors)+
-#   scale_y_reverse()+
-#   labs(y="")+
-#   labs(x = "Total Points Scored")+
-#   theme(panel.background = element_rect(fill = "#fafafa", color = NA),
-#         plot.background = element_rect(fill = "#fafafa", color = NA),
-#         panel.grid.major.y = element_line(color = "#fafafa"),
-#         panel.grid.minor.y = element_line(color = "#fafafa"),
-#         panel.grid.major.x = element_blank(),
-#         panel.grid.minor.x = element_blank(),
-#         text = element_text(family = "Trebuchet",face = "bold"),
-#         plot.title = element_text(hjust = 0.5,size = 24),
-#         axis.title.x = element_text(size = 20,family = "Trebuchet",face = "bold"),
-#         axis.text.x = element_blank(),
-#         axis.title.y = element_text(size = 20,family = "Trebuchet",face = "bold"),
-#         axis.text.y = element_text(size = 15),
-#         strip.background = element_rect(fill = "#fafafa", color = NA),
-#         axis.text.y.left = element_blank(),
-#         axis.ticks.y = element_blank(),
-#         axis.line.y = element_blank(),
-#         legend.position = "none")
-# 
-# static_cumulative_plot_animate+
-#   facet_null()+
-#   geom_text(x=450,y=-15,
-#             family = "Trebuchet",
-#             aes(label = as.character(scoringPeriodId)),
-#             size = 30)+
-#   transition_time(scoringPeriodId)
 
-### what if we did it by position and filled it by team?
+ggplot(d,aes(x=abbrev,y=totalScore))+geom_boxplot(aes(size = totalScore))
+
+library(gganimate)
+library(gifski)
+
+score_rank_by_week <- cumulative_score %>% 
+  select(-3) %>% 
+  group_by(scoringPeriodId) %>% 
+  mutate(
+    rank = rank(-cumulative_score)
+  )
+
+ static_cumulative_plot_animate <- ggplot(score_rank_by_week) +
+   geom_rect(
+     aes(
+       xmin = 0,
+       xmax = cumulative_score,
+       ymin = rank - 0.45,
+       ymax = rank + 0.45,
+       fill = abbrev
+     ),
+     alpha = 0.7
+   ) +
+   geom_image(aes(x=cumulative_score,y=rank,image = logo),size = 0.09)+
+   facet_wrap(~ scoringPeriodId, labeller = labeller(scoringPeriodId = function(x) paste0("Week ", x)))+
+   scale_fill_manual(values = OPTFFL_team_colors)+
+   scale_y_reverse()+
+   labs(y="")+
+   labs(x = "Total Points Scored")+
+   theme(panel.background = element_rect(fill = "#fafafa", color = NA),
+         plot.background = element_rect(fill = "#fafafa", color = NA),
+         panel.grid.major.y = element_line(color = "#fafafa"),
+         panel.grid.minor.y = element_line(color = "#fafafa"),
+         panel.grid.major.x = element_blank(),
+         panel.grid.minor.x = element_blank(),
+         text = element_text(family = "Trebuchet",face = "bold"),
+         plot.title = element_text(hjust = 0.5,size = 24),
+         axis.title.x = element_text(size = 20,family = "Trebuchet",face = "bold"),
+         axis.text.x = element_blank(),
+         axis.title.y = element_text(size = 20,family = "Trebuchet",face = "bold"),
+         axis.text.y = element_text(size = 15),
+         strip.background = element_rect(fill = "#fafafa", color = NA),
+         axis.text.y.left = element_blank(),
+         axis.ticks.y = element_blank(),
+         axis.line.y = element_blank(),
+         legend.position = "none")
+
+animation <- static_cumulative_plot_animate+
+   facet_null()+
+   geom_text(x=1050,y=-15,
+             family = "Trebuchet",
+             aes(label = as.character(scoringPeriodId)),
+             size = 30)+
+   transition_time(scoringPeriodId)
+ 
+final_animation <-animate(animation,duration = 20,fps = 10, end_pause = 30,
+         width=800,height=450,res=96,
+         renderer = gifski_renderer(loop = FALSE))
+ 
+anim_save("Recaps/Total Points Scored Animation.gif",animation = final_animation)
+
+# what if we did it by position and filled it by team?
 
 #Biggest_Bench
-# roster_data %>% 
-#   filter(lineupSlot == "BE") %>% 
+# roster_data %>%
+#   filter(lineupSlot == "BE") %>%
 #   arrange(desc(actualScore)) %>% view()
-# 
-# roster_data %>% 
-#   filter(lineupSlot == "BE") %>% 
+#
+# roster_data %>%
+#   filter(lineupSlot == "BE") %>%
 #   summarise(total_points = sum(actualScore,na.rm = T))
-# 
-# 
-# roster_data %>% 
-#   filter(lineupSlot != "BE") %>% 
-#   mutate(diff = projectedScore - actualScore) %>% 
-#   select(4,5,8,6,12,13,17) %>% 
+#
+#
+# roster_data %>%
+#   filter(lineupSlot != "BE") %>%
+#   mutate(diff = projectedScore - actualScore) %>%
+#   select(4,5,8,6,12,13,17) %>%
 #   arrange(desc(diff)) %>% view()
 
 # Ranking Table
