@@ -11,5 +11,24 @@
 
 | Total Points Animation | Current Standings |
 | :---: | :---: |
-| <img src="Recaps/Total%20Points%20Scored%20Animation.gif" alt="Total Points Scored Animation" width="547"> | <img src="Recaps/rankings.png" alt="Current Rankings" width="273"> |
+| <img src="Recaps/Total%20Points%20Scored%20Animation.gif" alt="Total Points Scored Animation" height="420"> | <img src="StandingsRankings.png" alt="Current Rankings" height="420"> |
 
+
+# Quarter Season Plots
+
+<p align="center" face="bold">
+  <b>Projected Points - Actual Points</b>
+</p>
+
+| Ordered by Standings | Ordered By Average Points Scored |
+| :---: | :---: |
+| <img src="Recaps/QZN Plots/Average%20Points%20Diff%20Plot%20Standings%202026-10-06.png" alt="Total Points Scored Animation" height="420"> | <img src="Recaps/QZN Plots/Average%20Points%20Diff%20Plot%20Standings%202026-11-03.png" alt="Current Rankings" height="420"> |
+
+
+<p align="center" face="bold">
+  <b>Other Charts</b>
+</p>
+
+| Scoring Ridge Plot | Ordered By Average Points Scored | Points for vs Against |
+| :---: | :---: | :---: |
+| <img src="Recaps/QZN Plots/Weekly%20Ridge%20Plot%202026-11-03.png" alt="Total Points Scored Animation" height="420"> | <img src="Recaps/QZN Plots/Half%20Season%20All%20Play.png" alt="Current Rankings" height="420"> | <img src="Recaps/QZN Plots/Points%20for%20vs%20against%20Plot%202026-11-03.png" alt="Current Rankings" height="420"> |
