@@ -31,3 +31,5 @@ jobs:
           git config --global user.email "github-actions[bot]@://github.com"
           git add stats/
           git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update weekly fantasy stats" && git push)
+
+
