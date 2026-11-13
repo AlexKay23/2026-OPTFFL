@@ -18,8 +18,9 @@
 | :---: | :---: |
 | <img src="Recaps/Total%20Points%20Scored%20Animation.gif" alt="Total Points Scored Animation" height="420"> | <img src="StandingsRankings.png" alt="Current Rankings" height="420"> |
 
-![Points For Leader](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com/AlexKay23/2026-OPTFFL/main/stats/pf_leader.json&style=for-the-badge)
-![Weekly High](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com/AlexKay23/2026-OPTFFL/main/stats/high_score.json&style=for-the-badge)
+![Points For Leader](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com/AlexKay23/2026-OPTFFL/main/stats/pf_leader.json&style=for-the-badge&color=darkgreen)
+![Weekly High](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com/AlexKay23/2026-OPTFFL/main/stats/high_score.json&style=for-the-badge&color=gold)
+
 
 # Quarter Season Plots
 
@@ -39,3 +40,9 @@
 | Scoring Ridge Plot | Ordered By Average Points Scored | Points for vs Against |
 | :---: | :---: | :---: |
 | <img src="Recaps/QZN Plots/Weekly%20Ridge%20Plot%202026-11-03.png" alt="Total Points Scored Animation" height="420"> | <img src="Recaps/QZN Plots/Half%20Season%20All%20Play.png" alt="Current Rankings" height="420"> | <img src="Recaps/QZN Plots/Points%20for%20vs%20against%20Plot%202026-11-03.png" alt="Current Rankings" height="420"> |
+
+# Record Book
+
+![All-Time Weekly High Score](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com/AlexKay23/2026-OPTFFL/main/stats/all_time_high.json&style=for-the-badge&color=faaf7d)
+![2024 Champion](https://img.shields.io/badge/2024%20Champion-Special%20Kay-gold?style=for-the-badge&color=909090)
+![2025 Champion](https://img.shields.io/badge/2025%20Champion-Ohio%20Performance%20Enhancers-gold?style=for-the-badge&color=cc5d3f)
