@@ -19,6 +19,9 @@
 | <img src="Recaps/Total%20Points%20Scored%20Animation.gif" alt="Total Points Scored Animation" height="420"> | <img src="StandingsRankings.png" alt="Current Rankings" height="420"> |
 
 
+![Points For Leader](https://shields.io)
+![Weekly High](https://shields.io)
+
 # Quarter Season Plots
 
 <p align="center" face="bold">
