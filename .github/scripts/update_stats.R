@@ -1,6 +1,6 @@
 library(jsonlite)
 
-league_id <- "YOUR_ESPN_LEAGUE_ID"  # <-- Keep your numeric ESPN League ID here
+league_id <- "710908445"  # <-- Keep your numeric ESPN League ID here
 season <- 2026
 url <- paste0(
   "https://espn.com",
