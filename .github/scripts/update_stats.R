@@ -3,7 +3,9 @@ library(jsonlite)
 league_id <- "710908445"  # <-- Keep your numeric ESPN League ID here
 season <- 2026
 url <- paste0(
-  "https://espn.com",
+  "https://",
+  "://espn.com",
+  "/apis/v3/games/ffl/seasons/",
   season,
   "/segments/0/leagues/",
   league_id,
