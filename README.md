@@ -37,7 +37,7 @@
   <b>Other Charts</b>
 </p>
 
-| Scoring Ridge Plot | Ordered By Average Points Scored | Points for vs Against |
+| Scoring Ridge Plot | All Play Records | Points for vs Against |
 | :---: | :---: | :---: |
 | <img src="Recaps/QZN Plots/Weekly%20Ridge%20Plot%202026-11-03.png" alt="Total Points Scored Animation" height="420"> | <img src="Recaps/QZN Plots/Half%20Season%20All%20Play.png" alt="Current Rankings" height="420"> | <img src="Recaps/QZN Plots/Points%20for%20vs%20against%20Plot%202026-11-03.png" alt="Current Rankings" height="420"> |
 
