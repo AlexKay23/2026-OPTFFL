@@ -1,6 +1,6 @@
 <div align="center">
 
-  # <img src="OPTFFL%20logo%2025.png" alt="Logo" height="200" align="center" /> 2026-OPTFFL <img src="OPTFFL%20logo%2025.png" alt="Logo" height="200" align="center" />
+  #  2026-OPTFFL <img src="OPTFFL%20logo%2025.png" alt="Logo" height="65" align="absmiddle" />
 
 </div>
 
