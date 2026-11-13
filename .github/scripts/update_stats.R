@@ -1,10 +1,13 @@
 library(jsonlite)
 
-league_id <- "710908445"  # <-- Paste your numeric ESPN League ID here
+league_id <- "YOUR_ESPN_LEAGUE_ID"  # <-- Keep your numeric ESPN League ID here
 season <- 2026
-url <- sprintf(
+url <- paste0(
   "https://espn.com",
-  season, league_id
+  season,
+  "/segments/0/leagues/",
+  league_id,
+  "?view=mTeam&view=mMatchup"
 )
 
 # Fetch league data from ESPN public API
