@@ -1,4 +1,9 @@
-# 2026-OPTFFL
+<div align="center">
+
+  # <img src="OPTFFL%20logo%2025.png" alt="Logo" height="200" align="center" /> 2026-OPTFFL <img src="OPTFFL%20logo%2025.png" alt="Logo" height="200" align="center" />
+
+</div>
+
 2026 OPTFFL Season Documents
 * **[`Recaps/`](Recaps/)** — Includes weekly Recaps.
 * **[`Recaps/QZN Plots/`](Recaps/QZN%20Plots/)** — Contains visuals for special recaps every quarter of the season.
