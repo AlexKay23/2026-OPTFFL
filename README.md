@@ -32,7 +32,7 @@
 | :---: | :---: |
 | <img src="Recaps/QZN Plots/Average%20Points%20Diff%20Plot%20Standings%202026-10-06.png" alt="Total Points Scored Animation" height="420"> | <img src="Recaps/QZN Plots/Average%20Points%20Diff%20Plot%20Standings%202026-11-03.png" alt="Current Rankings" height="420"> |
 
-
+.
 <p align="center" face="bold">
   <b>Other Charts</b>
 </p>
