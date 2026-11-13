@@ -18,9 +18,8 @@
 | :---: | :---: |
 | <img src="Recaps/Total%20Points%20Scored%20Animation.gif" alt="Total Points Scored Animation" height="420"> | <img src="StandingsRankings.png" alt="Current Rankings" height="420"> |
 
-
-![Points For Leader](https://shields.io)
-![Weekly High](https://shields.io)
+![Points For Leader](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com/AlexKay23/2026-OPTFFL/main/stats/pf_leader.json&style=for-the-badge)
+![Weekly High](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com/AlexKay23/2026-OPTFFL/main/stats/high_score.json&style=for-the-badge)
 
 # Quarter Season Plots
 
