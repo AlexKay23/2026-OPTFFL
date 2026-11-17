@@ -177,16 +177,16 @@ w9_roster <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 9) %>% map(.,as
 w10_roster <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 10) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
   filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>%
   select(2,4,17)
-# w11_roster <- fflr::team_roster(scoringPeriodId = 11) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
+# w11_roster <- fflr::team_roster(seasonId = 2026, scoringPeriodId = 11) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
 #   filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>%
 #   select(2,4,17)
-# w12_roster <- fflr::team_roster(scoringPeriodId = 12) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
+# w12_roster <- fflr::team_roster(seasonId = 2026, scoringPeriodId = 12) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
 #   filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>% 
 #   select(2,4,17)
-# w13_roster <- fflr::team_roster(scoringPeriodId = 13) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
+# w13_roster <- fflr::team_roster(seasonId = 2026, scoringPeriodId = 13) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
 #   filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>% 
 #   select(2,4,17)
-# w14_roster <- fflr::team_roster(scoringPeriodId = 14) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
+# w14_roster <- fflr::team_roster(seasonId = 2026, scoringPeriodId = 14) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
 #   filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>% 
 #   select(2,4,17)
 
@@ -323,7 +323,7 @@ score_rank_by_week <- cumulative_score %>%
 
 animation <- static_cumulative_plot_animate+
    facet_null()+
-   geom_text(x=1050,y=-15,
+   geom_text(x=1150,y=-15,
              family = "Trebuchet",
              aes(label = as.character(scoringPeriodId)),
              size = 30)+
