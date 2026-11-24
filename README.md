@@ -22,7 +22,7 @@
 ![Weekly High](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com/AlexKay23/2026-OPTFFL/main/stats/high_score.json&style=for-the-badge&color=gold)
 
 
-# Quarter Season Plots
+# Three Quarter Season Plots
 
 <p align="center" face="bold">
   <b>Projected Points - Actual Points</b>
@@ -30,7 +30,7 @@
 
 | Ordered by Standings | Ordered By Average Points Scored |
 | :---: | :---: |
-| <img src="Recaps/QZN Plots/Average%20Points%20Diff%20Plot%20Standings%202026-10-06.png" alt="Total Points Scored Animation" height="420"> | <img src="Recaps/QZN Plots/Average%20Points%20Diff%20Plot%20Standings%202026-11-03.png" alt="Current Rankings" height="420"> |
+| <img src="Recaps/QZN Plots/Average%20Points%20Diff%20Plot%20Standings%202026-11-24.png" alt="Total Points Scored Animation" height="420"> | <img src="Recaps/QZN Plots/Average%20Points%20Diff%20Plot%20Standings%202026-11-24.png" alt="Current Rankings" height="420"> |
 
 .
 <p align="center" face="bold">
@@ -39,7 +39,7 @@
 
 | Scoring Ridge Plot | All Play Records | Points for vs Against |
 | :---: | :---: | :---: |
-| <img src="Recaps/QZN Plots/Weekly%20Ridge%20Plot%202026-11-03.png" alt="Total Points Scored Animation" height="420"> | <img src="Recaps/QZN Plots/Half%20Season%20All%20Play.png" alt="Current Rankings" height="420"> | <img src="Recaps/QZN Plots/Points%20for%20vs%20against%20Plot%202026-11-03.png" alt="Current Rankings" height="420"> |
+| <img src="Recaps/QZN Plots/Weekly%20Ridge%20Plot%202026-11-24.png" alt="Total Points Scored Animation" height="420"> | <img src="Recaps/QZN Plots/ThreeQuarts%20season%20all%20play.png" alt="Current Rankings" height="420"> | <img src="Recaps/QZN Plots/Points%20for%20vs%20against%20Plot%202026-11-03.png" alt="Current Rankings" height="420"> |
 
 # Record Book
 
