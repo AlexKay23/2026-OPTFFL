@@ -22,7 +22,7 @@ showtext_auto()
 # install.packages("remotes")
 # remotes::install_github("k5cents/fflr")
 
-scoring_week <- 10
+scoring_week <- 11
 
 library(fflr)
 library(nflverse)
@@ -54,98 +54,6 @@ record_data <- fflr::league_standings(seasonId = 2026) %>%
   select(4,18)
 
 
-# plot scoring
-total_scores <- roster_data %>% 
-  filter(lineupSlot != "BE") %>% 
-  inner_join(.,logo) %>% 
-  inner_join(.,record_data) %>% 
-  group_by(abbrev) %>%
-  mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>% 
-  select(abbrev,logo,totalScore,record) %>% 
-  distinct()
-
-# total_score_plot <- ggplot(total_scores,aes(x=reorder(abbrev,totalScore),y =totalScore))+
-#   geom_col(fill = "darkgreen")+
-#   geom_text(aes(label = record), position = position_stack(vjust = .85), color = "#f3f088", size = 5,family = "Trebuchet", fontface = "bold")+
-#   coord_flip()+
-#   geom_image(aes(image = logo),
-#              size = 0.09,position = position_stack(vjust = 1))+
-#   labs(title = "Total Points Scored",y="Points")+
-#   theme(axis.text.y = element_blank(), axis.ticks.y = element_blank(),axis.title.y = element_blank(),
-#         panel.background = element_rect(fill = "#f3f088", color = NA),
-#         plot.background = element_rect(fill = "#f3f088", color = NA),
-#         panel.grid.major.y = element_line(color = "#f3f088"),
-#         panel.grid.minor.y = element_line(color = "#f3f088"),
-#         panel.grid.major.x = element_line(color = "#eec56f",linewidth = 2,linetype = 2),
-#         panel.grid.minor.x = element_line(color = "#eec56f",linewidth = 2,linetype = 2),
-#         text = element_text(family = "Trebuchet",face = "bold"),
-#         plot.title = element_text(hjust = 0.5,size = 24),
-#         axis.title.x = element_text(size = 20,family = "Trebuchet",face = "bold"),
-#         axis.text.x = element_text(size = 15))
-# 
-# total_score_plot
-
-##  Similar as above, but points should be made up by Position
-
-lineSlotScores <- roster_data %>% 
-  filter(lineupSlot != "BE") %>% 
-  inner_join(.,logo) %>% 
-  inner_join(.,record_data) %>% 
-  group_by(abbrev) %>% 
-  mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>% 
-  ungroup() %>% 
-  group_by(abbrev,lineupSlot) %>% 
-  mutate(Pos_Points = sum(actualScore)) %>% 
-  select(4,5,13,18:20) %>% 
-  distinct() %>% 
-  ungroup()
-
-lineSlotScores$lineupSlot <- factor(lineSlotScores$lineupSlot,
-                                    levels = c("K","D/ST","FLEX","TE","WR","RB","QB"))
-
-slot_colors <- c("K" = "#ff0073", "D/ST" = "darkcyan", "FLEX" = "#be0000", 
-                 "TE" = "darkgoldenrod", "WR" = "darkgrey", "RB" = "darkblue", "QB" = "darkgreen")
-
-# points_by_post <- ggplot(lineSlotScores, aes(x = reorder(abbrev,totalScore), y = actualScore, fill = lineupSlot)) +
-#   geom_col() +
-#   scale_fill_manual(values = slot_colors)+
-#   coord_flip() +
-#   geom_image(aes(x = abbrev, y = -10, image = logo), size = 0.085) +  # Adjust y to place logos below the bars
-#   scale_y_continuous(expand = expansion(mult = c(0.07, 0.07))) +  # Adjust the y-axis to make space for logos
-#   labs(title = "Total Points by Lineup Slot",
-#        x = "Team",
-#        y = "Total Points",
-#        fill = "Line-up Slot") +
-#   guides(fill = guide_legend(reverse = TRUE))+
-#   theme_minimal() +
-#   theme(axis.text.y = element_blank(),  # Remove x-axis text.. remember the coord flip
-#         axis.ticks.y = element_blank(),
-#         axis.title.y = element_blank(),
-#         panel.background = element_rect(fill = "#f3f088", color = NA),
-#         plot.background = element_rect(fill = "#f3f088", color = NA),
-#         panel.grid.major.y = element_line(color = "#f3f088"),
-#         panel.grid.minor.y = element_line(color = "#f3f088"),
-#         panel.grid.major.x = element_line(color = "#eec56f",linewidth = 2,linetype = 2),
-#         panel.grid.minor.x = element_line(color = "#eec56f",linewidth = 2,linetype = 2),
-#         text = element_text(family = "Trebuchet",face = "bold"),
-#         plot.title = element_text(hjust = 0.5,size = 24),
-#         axis.title.x = element_text(size = 20,family = "Trebuchet",face = "bold"),
-#         axis.text.x = element_text(size = 15),
-#         legend.title = element_text(face = "bold"))
-
-
-
-#1f77b4 (Blue)
-#ff7f0e (Orange)
-#2ca02c (Green)
-#d62728 (Red)
-#9467bd (Purple)
-#8c564b (Brown)
-#e377c2 (Pink)
-
-
-## Total Running Score
-
 
 w1_roster <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 1) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
   filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>% 
@@ -154,14 +62,14 @@ w2_roster <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 2) %>% map(.,as
   filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>%
   select(2,4,17)
 w3_roster <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 3) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
-   filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>%
-   select(2,4,17)
- w4_roster <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 4) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
-   filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>%
-   select(2,4,17)
- w5_roster <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 5) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
-   filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>%
-   select(2,4,17)
+  filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>%
+  select(2,4,17)
+w4_roster <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 4) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
+  filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>%
+  select(2,4,17)
+w5_roster <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 5) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
+  filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>%
+  select(2,4,17)
 w6_roster <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 6) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
   filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>%
   select(2,4,17)
@@ -177,9 +85,9 @@ w9_roster <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 9) %>% map(.,as
 w10_roster <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 10) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
   filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>%
   select(2,4,17)
-# w11_roster <- fflr::team_roster(seasonId = 2026, scoringPeriodId = 11) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
-#   filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>%
-#   select(2,4,17)
+w11_roster <- fflr::team_roster(seasonId = 2026, scoringPeriodId = 11) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
+  filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>%
+  select(2,4,17)
 # w12_roster <- fflr::team_roster(seasonId = 2026, scoringPeriodId = 12) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
 #   filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>% 
 #   select(2,4,17)
@@ -190,7 +98,7 @@ w10_roster <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 10) %>% map(.,
 #   filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>% 
 #   select(2,4,17)
 
-d <- list(w1_roster,w2_roster,w3_roster,w4_roster,w5_roster,w6_roster,w7_roster,w8_roster,w9_roster,w10_roster) %>% 
+d <- list(w1_roster,w2_roster,w3_roster,w4_roster,w5_roster,w6_roster,w7_roster,w8_roster,w9_roster,w10_roster,w11_roster) %>% 
   reduce(full_join) %>% distinct() %>% inner_join(.,logo)
 
 d_col <- d %>% summarise(all_score = sum(totalScore,na.rm = T)) %>% inner_join(.,logo)
@@ -286,53 +194,53 @@ score_rank_by_week <- cumulative_score %>%
     rank = rank(-cumulative_score)
   )
 
- static_cumulative_plot_animate <- ggplot(score_rank_by_week) +
-   geom_rect(
-     aes(
-       xmin = 0,
-       xmax = cumulative_score,
-       ymin = rank - 0.45,
-       ymax = rank + 0.45,
-       fill = abbrev
-     ),
-     alpha = 0.7
-   ) +
-   geom_image(aes(x=cumulative_score,y=rank,image = logo),size = 0.09)+
-   facet_wrap(~ scoringPeriodId, labeller = labeller(scoringPeriodId = function(x) paste0("Week ", x)))+
-   scale_fill_manual(values = OPTFFL_team_colors)+
-   scale_y_reverse()+
-   labs(y="")+
-   labs(x = "Total Points Scored")+
-   theme(panel.background = element_rect(fill = "#fafafa", color = NA),
-         plot.background = element_rect(fill = "#fafafa", color = NA),
-         panel.grid.major.y = element_line(color = "#fafafa"),
-         panel.grid.minor.y = element_line(color = "#fafafa"),
-         panel.grid.major.x = element_blank(),
-         panel.grid.minor.x = element_blank(),
-         text = element_text(family = "Trebuchet",face = "bold"),
-         plot.title = element_text(hjust = 0.5,size = 24),
-         axis.title.x = element_text(size = 20,family = "Trebuchet",face = "bold"),
-         axis.text.x = element_blank(),
-         axis.title.y = element_text(size = 20,family = "Trebuchet",face = "bold"),
-         axis.text.y = element_text(size = 15),
-         strip.background = element_rect(fill = "#fafafa", color = NA),
-         axis.text.y.left = element_blank(),
-         axis.ticks.y = element_blank(),
-         axis.line.y = element_blank(),
-         legend.position = "none")
+static_cumulative_plot_animate <- ggplot(score_rank_by_week) +
+  geom_rect(
+    aes(
+      xmin = 0,
+      xmax = cumulative_score,
+      ymin = rank - 0.45,
+      ymax = rank + 0.45,
+      fill = abbrev
+    ),
+    alpha = 0.7
+  ) +
+  geom_image(aes(x=cumulative_score,y=rank,image = logo),size = 0.09)+
+  facet_wrap(~ scoringPeriodId, labeller = labeller(scoringPeriodId = function(x) paste0("Week ", x)))+
+  scale_fill_manual(values = OPTFFL_team_colors)+
+  scale_y_reverse()+
+  labs(y="")+
+  labs(x = "Total Points Scored")+
+  theme(panel.background = element_rect(fill = "#fafafa", color = NA),
+        plot.background = element_rect(fill = "#fafafa", color = NA),
+        panel.grid.major.y = element_line(color = "#fafafa"),
+        panel.grid.minor.y = element_line(color = "#fafafa"),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        text = element_text(family = "Trebuchet",face = "bold"),
+        plot.title = element_text(hjust = 0.5,size = 24),
+        axis.title.x = element_text(size = 20,family = "Trebuchet",face = "bold"),
+        axis.text.x = element_blank(),
+        axis.title.y = element_text(size = 20,family = "Trebuchet",face = "bold"),
+        axis.text.y = element_text(size = 15),
+        strip.background = element_rect(fill = "#fafafa", color = NA),
+        axis.text.y.left = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.line.y = element_blank(),
+        legend.position = "none")
 
 animation <- static_cumulative_plot_animate+
-   facet_null()+
-   geom_text(x=1150,y=-15,
-             family = "Trebuchet",
-             aes(label = as.character(scoringPeriodId)),
-             size = 30)+
-   transition_time(scoringPeriodId)
- 
+  facet_null()+
+  geom_text(x=1150,y=-15,
+            family = "Trebuchet",
+            aes(label = as.character(scoringPeriodId)),
+            size = 30)+
+  transition_time(scoringPeriodId)
+
 final_animation <-animate(animation,duration = 20,fps = 10, end_pause = 30,
-         width=800,height=450,res=96,
-         renderer = gifski_renderer(loop = FALSE))
- 
+                          width=800,height=450,res=96,
+                          renderer = gifski_renderer(loop = FALSE))
+
 anim_save("Recaps/Total Points Scored Animation.gif",animation = final_animation)
 
 # what if we did it by position and filled it by team?
@@ -392,6 +300,103 @@ standings_table <- league_standings(seasonId = 2026) %>%
 gtsave(standings_table,"w11.png")
 
 standings_table %>%  gtsave("StandingsRankings.png",expand=10)
+
+
+
+
+
+# plot scoring
+total_scores <- roster_data %>% 
+  filter(lineupSlot != "BE") %>% 
+  inner_join(.,logo) %>% 
+  inner_join(.,record_data) %>% 
+  group_by(abbrev) %>%
+  mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>% 
+  select(abbrev,logo,totalScore,record) %>% 
+  distinct()
+
+# total_score_plot <- ggplot(total_scores,aes(x=reorder(abbrev,totalScore),y =totalScore))+
+#   geom_col(fill = "darkgreen")+
+#   geom_text(aes(label = record), position = position_stack(vjust = .85), color = "#f3f088", size = 5,family = "Trebuchet", fontface = "bold")+
+#   coord_flip()+
+#   geom_image(aes(image = logo),
+#              size = 0.09,position = position_stack(vjust = 1))+
+#   labs(title = "Total Points Scored",y="Points")+
+#   theme(axis.text.y = element_blank(), axis.ticks.y = element_blank(),axis.title.y = element_blank(),
+#         panel.background = element_rect(fill = "#f3f088", color = NA),
+#         plot.background = element_rect(fill = "#f3f088", color = NA),
+#         panel.grid.major.y = element_line(color = "#f3f088"),
+#         panel.grid.minor.y = element_line(color = "#f3f088"),
+#         panel.grid.major.x = element_line(color = "#eec56f",linewidth = 2,linetype = 2),
+#         panel.grid.minor.x = element_line(color = "#eec56f",linewidth = 2,linetype = 2),
+#         text = element_text(family = "Trebuchet",face = "bold"),
+#         plot.title = element_text(hjust = 0.5,size = 24),
+#         axis.title.x = element_text(size = 20,family = "Trebuchet",face = "bold"),
+#         axis.text.x = element_text(size = 15))
+# 
+# total_score_plot
+
+##  Similar as above, but points should be made up by Position
+# 
+# lineSlotScores <- roster_data %>% 
+#   filter(lineupSlot != "BE") %>% 
+#   inner_join(.,logo) %>% 
+#   inner_join(.,record_data) %>% 
+#   group_by(abbrev) %>% 
+#   mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>% 
+#   ungroup() %>% 
+#   group_by(abbrev,lineupSlot) %>% 
+#   mutate(Pos_Points = sum(actualScore)) %>% 
+#   select(4,5,13,18:20) %>% 
+#   distinct() %>% 
+#   ungroup()
+# 
+# lineSlotScores$lineupSlot <- factor(lineSlotScores$lineupSlot,
+#                                     levels = c("K","D/ST","FLEX","TE","WR","RB","QB"))
+# 
+# slot_colors <- c("K" = "#ff0073", "D/ST" = "darkcyan", "FLEX" = "#be0000", 
+#                  "TE" = "darkgoldenrod", "WR" = "darkgrey", "RB" = "darkblue", "QB" = "darkgreen")
+
+# points_by_post <- ggplot(lineSlotScores, aes(x = reorder(abbrev,totalScore), y = actualScore, fill = lineupSlot)) +
+#   geom_col() +
+#   scale_fill_manual(values = slot_colors)+
+#   coord_flip() +
+#   geom_image(aes(x = abbrev, y = -10, image = logo), size = 0.085) +  # Adjust y to place logos below the bars
+#   scale_y_continuous(expand = expansion(mult = c(0.07, 0.07))) +  # Adjust the y-axis to make space for logos
+#   labs(title = "Total Points by Lineup Slot",
+#        x = "Team",
+#        y = "Total Points",
+#        fill = "Line-up Slot") +
+#   guides(fill = guide_legend(reverse = TRUE))+
+#   theme_minimal() +
+#   theme(axis.text.y = element_blank(),  # Remove x-axis text.. remember the coord flip
+#         axis.ticks.y = element_blank(),
+#         axis.title.y = element_blank(),
+#         panel.background = element_rect(fill = "#f3f088", color = NA),
+#         plot.background = element_rect(fill = "#f3f088", color = NA),
+#         panel.grid.major.y = element_line(color = "#f3f088"),
+#         panel.grid.minor.y = element_line(color = "#f3f088"),
+#         panel.grid.major.x = element_line(color = "#eec56f",linewidth = 2,linetype = 2),
+#         panel.grid.minor.x = element_line(color = "#eec56f",linewidth = 2,linetype = 2),
+#         text = element_text(family = "Trebuchet",face = "bold"),
+#         plot.title = element_text(hjust = 0.5,size = 24),
+#         axis.title.x = element_text(size = 20,family = "Trebuchet",face = "bold"),
+#         axis.text.x = element_text(size = 15),
+#         legend.title = element_text(face = "bold"))
+
+
+
+#1f77b4 (Blue)
+#ff7f0e (Orange)
+#2ca02c (Green)
+#d62728 (Red)
+#9467bd (Purple)
+#8c564b (Brown)
+#e377c2 (Pink)
+
+
+## Total Running Score
+
 
 #####
 

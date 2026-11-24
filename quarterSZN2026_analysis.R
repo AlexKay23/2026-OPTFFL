@@ -23,7 +23,7 @@ fflr::ffl_id(leagueId = 710908445)
 
 # Load Data ####
 
-scoring_week <- 8
+scoring_week <- 11
 
 logo <- league_teams(seasonId = 2026) %>% 
   select(2:4)
@@ -60,12 +60,12 @@ w7_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 7) %>% map
   filter(lineupSlot != "BE")
 w8_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 8) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
   filter(lineupSlot != "BE")
-# w9_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 9) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
-#   filter(lineupSlot != "BE")
-# w10_roster_Qszn <- fflr::team_roster(scoringPeriodId = 10) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
-#   filter(lineupSlot != "BE")
-# w11_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 11) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
-#   filter(lineupSlot != "BE")
+w9_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 9) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
+  filter(lineupSlot != "BE")
+w10_roster_Qszn <- fflr::team_roster(seasonId = 2026, scoringPeriodId = 10) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
+  filter(lineupSlot != "BE")
+w11_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 11) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
+  filter(lineupSlot != "BE")
 # w12_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 12) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
 #   filter(lineupSlot != "BE")
 # w13_roster_Qszn <- fflr::team_roster(seasonId = 2026,scoringPeriodId = 13) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
@@ -82,7 +82,10 @@ qzn_data <- list(w1_roster_Qszn,
      w5_roster_Qszn,
      w6_roster_Qszn,
      w7_roster_Qszn,
-     w8_roster_Qszn) %>% 
+     w8_roster_Qszn,
+     w9_roster_Qszn,
+     w10_roster_Qszn,
+     w11_roster_Qszn) %>% 
   reduce(full_join) %>% distinct() %>% inner_join(.,logo)
 
 
@@ -297,10 +300,10 @@ pts_for_vs_against_plot <- ggplot(standings_data,
   geom_hline(yintercept = mean(standings_data$pointsAgainst),color="darkgreen",linewidth=1.5,alpha=0.4)+
   # annotate("text",y = mean(standings_data$pointsAgainst)+5,x=425,label="avg pts against")+
   # annotate("text",x=mean(standings_data$pointsFor)-5,y=265,label="avg pts For",angle=90)+
-  annotate("text",x= 700,y=650,label = "Lucky or Bad?",size=5,fontface="bold")+
-  annotate("text",x= 950, y=650, label = "Easy Schedule",size=5,fontface="bold")+
-  annotate("text",x= 950, y= 950, label= "Battle Tested",size=5,fontface="bold")+
-  annotate("text",x= 700,y=950,label="Tough Schedule",size=5,fontface="bold")+
+  annotate("text",x= 925,y=900,label = "Lucky or Bad?",size=5,fontface="bold")+
+  annotate("text",x= 1200, y=875, label = "Easy Schedule",size=5,fontface="bold")+
+  annotate("text",x= 1200, y= 1250, label= "Battle Tested",size=5,fontface="bold")+
+  annotate("text",x= 925,y=1250,label="Tough Schedule",size=5,fontface="bold")+
   theme_bw()+
   theme(text = element_text(family = "Trebuchet",face = "bold"),
         plot.title = element_text(hjust = 0.5,size = 24),
@@ -353,7 +356,7 @@ avg_proj_points_diff_plot<-ggplot(projected_vs_actuals %>% select(abbrev,team_av
   geom_image(aes(image = logo_path),
              size = 0.09,position = position_stack(vjust = 1))+
   geom_hline(yintercept = leauge_projVsActual_line_Value,linewidth = 1.5,colour = "blue",linetype = 2)+
-  geom_text(aes(x="YARN",y= leauge_projVsActual_line_Value -1.5 ,label = paste0("Leauge Average ",round(leauge_projVsActual_line_Value,2))),
+  geom_text(aes(x="YARN",y= leauge_projVsActual_line_Value -6 ,label = paste0("Leauge Average ",round(leauge_projVsActual_line_Value,2))),
             family = "Trebuchet",fontface = "bold",size = 4.5,check_overlap = TRUE)+
   xlab("Teams Ordered by Average Projected Points")+
   ylab("Average Projected - Actual Point Differental")+
@@ -377,7 +380,7 @@ standings_proj_points_diff_plot<-ggplot(projected_vs_actuals %>% select(abbrev,t
   geom_image(aes(image = logo_path),
              size = 0.09,position = position_stack(vjust = 1))+
   geom_hline(yintercept = leauge_projVsActual_line_Value,linewidth = 1.5,colour = "blue",linetype = 2)+
-  geom_text(aes(x="NNT",y= leauge_projVsActual_line_Value +1.5 ,label = paste0("Leauge Average ",round(leauge_projVsActual_line_Value,2))),
+  geom_text(aes(x="LLL",y= leauge_projVsActual_line_Value -.5 ,label = paste0("Average Diff. ",round(leauge_projVsActual_line_Value,2))),
             family = "Trebuchet",fontface = "bold",size = 4.5,check_overlap = TRUE)+
   xlab("Teams Ordered by Playoff seed")+
   ylab("Average Projected - Actual Point Differental")+
